@@ -140,8 +140,14 @@ function LoginPage({ onLogin, onAdminLogin }) {
                 {loading ? 'Logging in...' : 'Admin Login'}
               </button>
             </form>
-            <div className="admin-demo">
-              <p className="admin-cred">Demo: admin@cec.com / admin123</p>
+            <div className="demo-section">
+              <p>Demo Admin:</p>
+              <div className="demo-buttons">
+                <button type="button" className="demo-btn" onClick={() => { setEmail('admin@cec.com'); setPassword('admin123'); }}>
+                  Admin Demo
+                </button>
+              </div>
+              <small>Click Demo button then click Admin Login</small>
             </div>
           </>
         )}
@@ -172,7 +178,7 @@ function AdminDashboard({ adminInfo, onLogout }) {
           >
             👥 Students
           </button>
-          <a href="https://cec-english-camp.vercel.app" target="_blank" rel="noopener noreferrer" className="nav-btn">
+          <a href="https://cecenglishcamp.github.io/" target="_blank" rel="noopener noreferrer" className="nav-btn">
             🏠 Main Website
           </a>
         </nav>

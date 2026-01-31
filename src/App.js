@@ -151,74 +151,105 @@ function LoginPage({ onLogin, onAdminLogin }) {
 }
 
 function AdminDashboard({ adminInfo, onLogout }) {
+  const [currentTab, setCurrentTab] = useState('dashboard');
+
   return (
     <div className="admin-dashboard">
       <header className="admin-header">
         <div className="header-left">
           <h1>🔧 CEC Admin Dashboard</h1>
         </div>
+        <nav className="admin-nav">
+          <button 
+            className={`nav-btn ${currentTab === 'dashboard' ? 'active' : ''}`}
+            onClick={() => setCurrentTab('dashboard')}
+          >
+            📊 Dashboard
+          </button>
+          <button 
+            className={`nav-btn ${currentTab === 'students' ? 'active' : ''}`}
+            onClick={() => setCurrentTab('students')}
+          >
+            👥 Students
+          </button>
+          <a href="https://cec-english-camp.vercel.app" target="_blank" rel="noopener noreferrer" className="nav-btn">
+            🏠 Main Website
+          </a>
+        </nav>
         <div className="header-right">
           <span className="admin-name">{adminInfo.name}</span>
           <button className="logout-btn" onClick={onLogout}>Logout</button>
         </div>
       </header>
       <div className="admin-container">
-        <div className="card admin-card">
-          <h2>System Overview</h2>
-          <div className="admin-stats">
-            <div className="stat-item">
-              <span className="stat-label">Total Students</span>
-              <span className="stat-value">3</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-label">Active Camps</span>
-              <span className="stat-value">3</span>
-            </div>
-            <div className="stat-item">
-              <span className="stat-label">Total Lessons</span>
-              <span className="stat-value">80</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="card admin-card">
-          <h2>Students Management</h2>
-          <table className="students-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Camp</th>
-                <th>Level</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Object.values(STUDENTS_DB).map(student => (
-                <tr key={student.id}>
-                  <td>{student.name}</td>
-                  <td>{student.email}</td>
-                  <td>Camp {student.camp}</td>
-                  <td>{student.level}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <div className="card admin-card">
-          <h2>Student Progress</h2>
-          <div className="progress-overview">
-            {Object.entries(PROGRESS_DB).map(([studentId, progress]) => (
-              <div key={studentId} className="progress-item">
-                <span className="student-name">{STUDENTS_DB[studentId].name}</span>
-                <div className="mini-progress-bar">
-                  <div className="mini-progress-fill" style={{ width: `${progress.completion_rate}%` }}></div>
+        {currentTab === 'dashboard' && (
+          <>
+            <div className="card admin-card">
+              <h2>System Overview</h2>
+              <div className="admin-stats">
+                <div className="stat-item">
+                  <span className="stat-label">Total Students</span>
+                  <span className="stat-value">3</span>
                 </div>
-                <span className="progress-text">{progress.completion_rate}%</span>
+                <div className="stat-item">
+                  <span className="stat-label">Active Camps</span>
+                  <span className="stat-value">3</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-label">Total Lessons</span>
+                  <span className="stat-value">80</span>
+                </div>
               </div>
-            ))}
+            </div>
+
+            <div className="card admin-card">
+              <h2>Student Progress</h2>
+              <div className="progress-overview">
+                {Object.entries(PROGRESS_DB).map(([studentId, progress]) => (
+                  <div key={studentId} className="progress-item">
+                    <span className="student-name">{STUDENTS_DB[studentId].name}</span>
+                    <div className="mini-progress-bar">
+                      <div className="mini-progress-fill" style={{ width: `${progress.completion_rate}%` }}></div>
+                    </div>
+                    <span className="progress-text">{progress.completion_rate}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+
+        {currentTab === 'students' && (
+          <div className="card admin-card">
+            <h2>Students Management</h2>
+            <table className="students-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Camp</th>
+                  <th>Level</th>
+                  <th>Progress</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(STUDENTS_DB).map(([studentId, student]) => (
+                  <tr key={studentId}>
+                    <td>{student.name}</td>
+                    <td>{student.email}</td>
+                    <td>Camp {student.camp}</td>
+                    <td>{student.level}</td>
+                    <td>
+                      <div className="mini-progress-bar">
+                        <div className="mini-progress-fill" style={{ width: `${PROGRESS_DB[studentId].completion_rate}%` }}></div>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

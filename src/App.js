@@ -7,13 +7,18 @@ const STUDENTS_DB = {
   "student003": { id: "student003", name: "Park Su-jin", email: "sujin@cec.com", password: "demo123", camp: "C", level: "G61-G80", joined: "2025-01-10" }
 };
 
+const ADMIN_DB = {
+  "admin001": { id: "admin001", email: "admin@cec.com", password: "admin123", name: "CEC Admin", role: "admin" }
+};
+
 const PROGRESS_DB = {
   "student001": { completed_lessons: ["G01", "G02", "G03"], current_lesson: "G04", completion_rate: 30, last_activity: "2025-01-28T10:30:00", scores: [85, 90, 78] },
   "student002": { completed_lessons: ["G21", "G22", "G23", "G24", "G25"], current_lesson: "G26", completion_rate: 25, last_activity: "2025-01-27T14:15:00", scores: [92, 88, 91, 85, 89] },
   "student003": { completed_lessons: ["G61", "G62", "G63", "G64", "G65", "G66"], current_lesson: "G67", completion_rate: 33, last_activity: "2025-01-28T09:45:00", scores: [95, 93, 96, 91, 94, 92] }
 };
 
-function LoginPage({ onLogin }) {
+function LoginPage({ onLogin, onAdminLogin }) {
+  const [tab, setTab] = useState('student');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -25,7 +30,7 @@ function LoginPage({ onLogin }) {
     { email: 'sujin@cec.com', password: 'demo123', name: 'Camp C' }
   ];
 
-  const handleSubmit = (e) => {
+  const handleStudentSubmit = (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
@@ -46,6 +51,27 @@ function LoginPage({ onLogin }) {
     }, 500);
   };
 
+  const handleAdminSubmit = (e) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+    setTimeout(() => {
+      let admin = null;
+      for (let aid in ADMIN_DB) {
+        if (ADMIN_DB[aid].email === email && ADMIN_DB[aid].password === password) {
+          admin = ADMIN_DB[aid];
+          break;
+        }
+      }
+      if (admin) {
+        onAdminLogin(admin.id, admin.name);
+      } else {
+        setError('Invalid admin email or password');
+      }
+      setLoading(false);
+    }, 500);
+  };
+
   const handleDemoLogin = (cred) => {
     setEmail(cred.email);
     setPassword(cred.password);
@@ -55,31 +81,143 @@ function LoginPage({ onLogin }) {
     <div className="login-container">
       <div className="login-box">
         <h1>CEC English Camp</h1>
-        <h2>Student Portal</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="your.email@cec.com" required />
-          </div>
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" required />
-          </div>
-          {error && <div className="error-message">{error}</div>}
-          <button type="submit" disabled={loading} className="login-btn">
-            {loading ? 'Logging in...' : 'Login'}
+        <div className="tab-menu">
+          <button 
+            className={`tab-btn ${tab === 'student' ? 'active' : ''}`}
+            onClick={() => { setTab('student'); setEmail(''); setPassword(''); setError(''); }}
+          >
+            Student Portal
           </button>
-        </form>
-        <div className="demo-section">
-          <p>Demo Accounts:</p>
-          <div className="demo-buttons">
-            {demoCredentials.map((cred, idx) => (
-              <button key={idx} type="button" className="demo-btn" onClick={() => handleDemoLogin(cred)}>
-                {cred.name}
+          <button 
+            className={`tab-btn ${tab === 'admin' ? 'active' : ''}`}
+            onClick={() => { setTab('admin'); setEmail(''); setPassword(''); setError(''); }}
+          >
+            Admin Login
+          </button>
+        </div>
+
+        {tab === 'student' ? (
+          <>
+            <form onSubmit={handleStudentSubmit}>
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="your.email@cec.com" required />
+              </div>
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" required />
+              </div>
+              {error && <div className="error-message">{error}</div>}
+              <button type="submit" disabled={loading} className="login-btn">
+                {loading ? 'Logging in...' : 'Login'}
               </button>
+            </form>
+            <div className="demo-section">
+              <p>Demo Accounts:</p>
+              <div className="demo-buttons">
+                {demoCredentials.map((cred, idx) => (
+                  <button key={idx} type="button" className="demo-btn" onClick={() => handleDemoLogin(cred)}>
+                    {cred.name}
+                  </button>
+                ))}
+              </div>
+              <small>Click Demo button then click Login</small>
+            </div>
+          </>
+        ) : (
+          <>
+            <form onSubmit={handleAdminSubmit}>
+              <div className="form-group">
+                <label htmlFor="admin-email">Admin Email</label>
+                <input type="email" id="admin-email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="admin@cec.com" required />
+              </div>
+              <div className="form-group">
+                <label htmlFor="admin-password">Admin Password</label>
+                <input type="password" id="admin-password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="••••••••" required />
+              </div>
+              {error && <div className="error-message">{error}</div>}
+              <button type="submit" disabled={loading} className="login-btn">
+                {loading ? 'Logging in...' : 'Admin Login'}
+              </button>
+            </form>
+            <div className="admin-demo">
+              <p className="admin-cred">Demo: admin@cec.com / admin123</p>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function AdminDashboard({ adminInfo, onLogout }) {
+  return (
+    <div className="admin-dashboard">
+      <header className="admin-header">
+        <div className="header-left">
+          <h1>🔧 CEC Admin Dashboard</h1>
+        </div>
+        <div className="header-right">
+          <span className="admin-name">{adminInfo.name}</span>
+          <button className="logout-btn" onClick={onLogout}>Logout</button>
+        </div>
+      </header>
+      <div className="admin-container">
+        <div className="card admin-card">
+          <h2>System Overview</h2>
+          <div className="admin-stats">
+            <div className="stat-item">
+              <span className="stat-label">Total Students</span>
+              <span className="stat-value">3</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-label">Active Camps</span>
+              <span className="stat-value">3</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-label">Total Lessons</span>
+              <span className="stat-value">80</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="card admin-card">
+          <h2>Students Management</h2>
+          <table className="students-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Camp</th>
+                <th>Level</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.values(STUDENTS_DB).map(student => (
+                <tr key={student.id}>
+                  <td>{student.name}</td>
+                  <td>{student.email}</td>
+                  <td>Camp {student.camp}</td>
+                  <td>{student.level}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="card admin-card">
+          <h2>Student Progress</h2>
+          <div className="progress-overview">
+            {Object.entries(PROGRESS_DB).map(([studentId, progress]) => (
+              <div key={studentId} className="progress-item">
+                <span className="student-name">{STUDENTS_DB[studentId].name}</span>
+                <div className="mini-progress-bar">
+                  <div className="mini-progress-fill" style={{ width: `${progress.completion_rate}%` }}></div>
+                </div>
+                <span className="progress-text">{progress.completion_rate}%</span>
+              </div>
             ))}
           </div>
-          <small>Click Demo button then click Login</small>
         </div>
       </div>
     </div>
@@ -286,22 +424,30 @@ function TutorPage({ studentInfo, onNavigate }) {
 export default function App() {
   const [currentPage, setCurrentPage] = useState('login');
   const [studentInfo, setStudentInfo] = useState(null);
+  const [adminInfo, setAdminInfo] = useState(null);
 
   const handleLogin = (studentId, name, camp) => {
     setStudentInfo({ id: studentId, name, camp });
     setCurrentPage('dashboard');
   };
 
+  const handleAdminLogin = (adminId, name) => {
+    setAdminInfo({ id: adminId, name });
+    setCurrentPage('admin');
+  };
+
   const handleLogout = () => {
     setStudentInfo(null);
+    setAdminInfo(null);
     setCurrentPage('login');
   };
 
   return (
     <div className="App">
-      {currentPage === 'login' && <LoginPage onLogin={handleLogin} />}
+      {currentPage === 'login' && <LoginPage onLogin={handleLogin} onAdminLogin={handleAdminLogin} />}
       {currentPage === 'dashboard' && studentInfo && <Dashboard studentInfo={studentInfo} onNavigate={setCurrentPage} onLogout={handleLogout} />}
       {currentPage === 'tutor' && studentInfo && <TutorPage studentInfo={studentInfo} onNavigate={setCurrentPage} />}
+      {currentPage === 'admin' && adminInfo && <AdminDashboard adminInfo={adminInfo} onLogout={handleLogout} />}
     </div>
   );
 }

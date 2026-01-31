@@ -241,6 +241,46 @@ body {
   align-items: center;
   box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
   border-bottom: 2px solid #00FFFF;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.admin-header h1 {
+  color: #00FFFF;
+  font-size: 28px;
+  margin: 0;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.admin-nav {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.nav-btn {
+  padding: 10px 16px;
+  background: transparent;
+  color: #00FFFF;
+  border: 1px solid #00FFFF;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.nav-btn:hover {
+  background: rgba(0, 255, 255, 0.1);
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+}
+
+.nav-btn.active {
+  background: linear-gradient(135deg, #00FFFF 0%, #00CCCC 100%);
+  color: #000000;
+  box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
 }
 
 .dashboard-header h1,
@@ -879,6 +919,17 @@ body {
   .tutor-header {
     flex-direction: column;
     gap: 15px;
+  }
+
+  .admin-nav {
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .nav-btn {
+    flex: 1;
+    min-width: 100px;
   }
 
   .dashboard-container,

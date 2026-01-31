@@ -233,6 +233,12 @@ body {
   border-bottom: 2px solid #00FFFF;
 }
 
+.admin-logo {
+  height: 40px;
+  width: auto;
+  margin-right: 15px;
+}
+
 .admin-header {
   background: #111;
   padding: 20px 40px;
@@ -914,6 +920,47 @@ body {
 }
 
 @media (max-width: 768px) {
+  .login-box {
+    padding: 30px 20px;
+  }
+
+  .login-box h1 {
+    font-size: 28px;
+  }
+
+  .form-group label {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  .form-group input {
+    padding: 16px;
+    font-size: 16px;
+  }
+
+  .login-btn {
+    padding: 16px;
+    font-size: 18px;
+  }
+
+  .demo-btn {
+    padding: 12px;
+    font-size: 14px;
+  }
+
+  .demo-section p {
+    font-size: 16px;
+  }
+
+  .demo-section small {
+    font-size: 13px;
+  }
+
+  .tab-btn {
+    font-size: 14px;
+    padding: 10px;
+  }
+
   .dashboard-header,
   .admin-header,
   .tutor-header {
@@ -930,6 +977,8 @@ body {
   .nav-btn {
     flex: 1;
     min-width: 100px;
+    font-size: 12px;
+    padding: 8px 12px;
   }
 
   .dashboard-container,
@@ -941,8 +990,17 @@ body {
     grid-template-columns: 1fr;
   }
 
+  .card {
+    padding: 20px;
+  }
+
+  .card h2 {
+    font-size: 18px;
+  }
+
   .tutor-header h1 {
     width: 100%;
+    font-size: 24px;
   }
 
   .lesson-selector {
@@ -956,5 +1014,11 @@ body {
 
   .message-content {
     max-width: 90%;
+    font-size: 15px;
+    padding: 12px 14px;
+  }
+
+  .form-group input::placeholder {
+    font-size: 14px;
   }
 }

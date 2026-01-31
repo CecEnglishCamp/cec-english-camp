@@ -163,7 +163,8 @@ function AdminDashboard({ adminInfo, onLogout }) {
     <div className="admin-dashboard">
       <header className="admin-header">
         <div className="header-left">
-          <h1>🔧 CEC Admin Dashboard</h1>
+          <img src="https://raw.githubusercontent.com/CecEnglishCamp/cecenglishcamp.github.io/main/assets/img/robo2.png" alt="CEC Logo" className="admin-logo" />
+          <h1>CEC Admin Dashboard</h1>
         </div>
         <nav className="admin-nav">
           <button 
